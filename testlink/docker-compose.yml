@@ -1,0 +1,11 @@
+
+# usage
+# docker-compose up -d testlink
+
+testlink:
+  image: richarvey/nginx-php-fpm:latest
+  container_name: testlink
+  ports:
+    - 8080:80
+  volumes:
+    - "/var/container_data/testlink:/usr/share/nginx/html"

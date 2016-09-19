@@ -1,0 +1,2 @@
+LC_ALL=en.US.utf8
+0 0 * * * root bandersnatch mirror |& logger -t bandersnatch[mirror]

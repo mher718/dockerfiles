@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#set up pip
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+pip install --upgrade pip
+
+# ..fixes warnings due to openssl and Python <2.7.9
+pip install urllib3
+pip install cryptography
+pip install pyopenssl ndg-httpsclient pyasn1
+python <<-END
+import urllib3.contrib.pyopenssl
+urllib3.contrib.pyopenssl.inject_into_urllib3()
+END
+
+# ..bandersnatch
+pip install -r https://bitbucket.org/pypa/bandersnatch/raw/stable/requirements.txt
+
+mkdir -p /var/packages/pypi/web
+

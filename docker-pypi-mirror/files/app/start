@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+USAGE="
+usage: /app/start COMMAND COMMAND ..
+
+commands:
+ - version # display version information
+ - fetch   # run fetch task
+ - web     # run webserver
+ - cron    # run cron
+"
+
+if [ "$#" -eq 0 ]
+then
+  echo "$USAGE"
+else
+  for arg in $@
+  do
+    case $arg in
+      "version"):
+        cat /etc/version.conf
+        ;;
+      "fetch"):
+        bandersnatch
+        ;;
+      "web"):
+        nginx
+        exit
+        ;;
+      "cron"):
+        cron -f
+        exit
+        ;;
+      *):
+        echo "$USAGE"
+        ;;
+    esac
+  done
+ fi

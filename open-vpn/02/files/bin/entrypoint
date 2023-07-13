@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ "$DEBUG" == "true" ]; then
+  set -x
+fi
+set -e
+
+CONFIGFILES="/opt/configuration"
+
+source "$CONFIGFILES/set_defaults.sh"
+source "$CONFIGFILES/setup_networking.sh"
+source "$CONFIGFILES/setup_pki.sh"
+
+if [ "${USE_CLIENT_CERTIFICATE}" != "true" ] ; then
+ source "$CONFIGFILES/setup_ldap.sh"
+ source "$CONFIGFILES/setup_otp.sh"
+fi 
+
+source "$CONFIGFILES/create_server_config.sh"
+
+if [ "${FAIL2BAN_ENABLED}" == "true" ] ; then
+ source "$CONFIGFILES/setup_fail2ban.sh"
+fi
+
+echo
+echo "***************"
+echo " Client config "
+echo "***************"
+echo
+/usr/local/bin/show-client-config
+
+echo
+echo "***************"
+echo "Running NSCLD"
+echo "***************"
+echo
+nslcd
+
+echo
+echo "***************"
+echo "Running OpenVPN"
+echo "***************"
+echo
+exec openvpn --config $OPENVPN_DIR/server.conf
